@@ -129,3 +129,42 @@ func (t *Token) Debug(types func(T uint32) string, indent ...int) string {
 	}
 	return buffer
 }
+
+// Is checks if the token is of the given type and the raw value is equal to raw, if supplied.
+func (t *Token) Is(T uint32, value ...string) bool {
+	if t.Type == T {
+		if len(value) == 0 {
+			return true
+		} else {
+			if t.Raw != nil && *t.Raw == value[0] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// CollectRaw collects the raw value from the token and all it's children
+func (t *Token) CollectRaw(sep ...string) string {
+	buffer := ""
+	sepToken := ""
+	if len(sep) > 0 {
+		sepToken = sep[0]
+	}
+	if t.Raw != nil {
+		buffer += *t.Raw
+	}
+	if t.Children != nil {
+		first := true
+		t.Children.Walk(func(t *Token) bool {
+			if first {
+				first = false
+			} else {
+				buffer += sepToken
+			}
+			buffer += t.CollectRaw()
+			return false
+		})
+	}
+	return buffer
+}

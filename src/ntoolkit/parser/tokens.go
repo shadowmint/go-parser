@@ -90,7 +90,7 @@ func (tokens *Tokens) Collapse(start *Token, end *Token) *Token {
 	return token
 }
 
-// Walk all nodes in this list until out of tokens or the function returns false.
+// Walk all nodes in this list until out of tokens or the function returns true.
 func (tokens *Tokens) Walk(op func(t *Token) bool) {
 	for marker := tokens.Front; marker != nil; marker = marker.Next {
 		if halt := op(marker); halt {
