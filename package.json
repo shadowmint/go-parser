@@ -1,0 +1,32 @@
+{
+  "name": "go-parser",
+  "version": "1.0.0",
+  "description": "A simple text parsing library",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shadowmint/go-parser.git"
+  },
+  "files": [
+    "index.js",
+    "scripts",
+    "src"
+  ],
+  "author": "douglas.linder@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shadowmint/go-parser/issues"
+  },
+  "homepage": "https://github.com/shadowmint/go-parser",
+  "scripts": {
+    "test": "go test -v ./src/ntoolkit/...",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "dependencies": {
+    "go-assert": "github:shadowmint/go-assert",
+    "go-errors": "github:shadowmint/go-errors",
+    "go-futures": "github:shadowmint/go-futures",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0"
+  }
+}
