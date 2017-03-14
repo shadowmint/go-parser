@@ -135,14 +135,15 @@ func NewBlockParser() *BlockParser {
 }
 
 func (bp *BlockParser) Parse(chunk string) {
+	if bp.promise != nil {
+		return
+	}
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
-	if bp.promise == nil {
-		bp.promise = parser.Parse(bp.tokenizer, bp.classifier, func(handle func(data string, done bool)) {
-			bp.handle = handle
-			wg.Done()
-		})
-	}
+	bp.promise = parser.Parse(bp.tokenizer, bp.classifier, func(handle func(data string, done bool)) {
+		bp.handle = handle
+		wg.Done()
+	})
 	wg.Wait()
 	bp.handle(chunk, false)
 }
@@ -154,13 +155,20 @@ func (bp *BlockParser) Finished() (*parser.Tokens, error) {
 	wg.Add(1)
 	bp.promise.Then(func(t *parser.Tokens) {
 		rtn = t
+		bp.reset()
 		wg.Done()
 	}, func(terr error) {
 		err = terr
+		bp.reset()
 		wg.Done()
 	})
 	bp.handle("", true)
 	return rtn, err
+}
+
+func (bp *BlockParser) reset() {
+	bp.promise = nil
+	bp.handle = nil
 }
 
 func BlockParserTokenTypes(T uint32) string {
