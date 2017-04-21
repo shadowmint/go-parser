@@ -168,3 +168,24 @@ func (t *Token) CollectRaw(sep ...string) string {
 	}
 	return buffer
 }
+
+// WalkRaw collects the raw value from the token and all it's peers
+func (t *Token) WalkRaw(sep ...string) string {
+	buffer := ""
+	sepToken := ""
+	if len(sep) > 0 {
+		sepToken = sep[0]
+	}
+	marker := t
+	first := true
+	for marker != nil {
+		if first {
+			first = false
+		} else {
+			buffer += sepToken
+		}
+		buffer += marker.CollectRaw(sepToken)
+		marker = marker.Next
+	}
+	return buffer
+}
