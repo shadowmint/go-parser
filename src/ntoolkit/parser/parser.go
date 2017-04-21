@@ -10,7 +10,7 @@ func Parse(tokenizer Tokenizer, classifier Classifier, stream func(func(data str
 	rtn := &DeferredTokens{}
 	root := NewTokens(nil)
 	parseTokens(root, tokenizer, stream).Then(func() {
-		maxIterations := root.Count() * 10
+		maxIterations := (1 + root.Count()) * 10
 		if err := classifyTokens(root, classifier, maxIterations); err != nil {
 			rtn.Reject(err)
 		} else {
